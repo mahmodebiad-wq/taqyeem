@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نموذج التقييم الشهري - قسم التشغيل</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d2137;
+    --navy-mid: #163352;
+    --teal: #0e7490;
+    --teal-light: #22d3ee;
+    --gold: #f59e0b;
+    --gold-light: #fde68a;
+    --surface: #f0f7ff;
+    --white: #ffffff;
+    --text: #0f172a;
+    --text-light: #475569;
+    --border: #cbd5e1;
+    --success: #10b981;
+    --danger: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 40%, #1e4a6e 100%);
+    min-height: 100vh;
+    padding: 24px 16px;
+    color: var(--text);
+  }
+
+  .page-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy-mid), #1a4a6a);
+    border: 1px solid rgba(14,116,144,0.4);
+    border-radius: 20px 20px 0 0;
+    padding: 32px 36px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top, rgba(34,211,238,0.08) 0%, transparent 70%);
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(14,116,144,0.2);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 100px;
+    padding: 6px 20px;
+    color: var(--teal-light);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Tajawal', sans-serif;
+    color: var(--white);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .header h2 {
+    color: var(--teal-light);
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .header-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius: 2px;
+    margin: 16px auto 0;
+  }
+
+  /* Main card */
+  .main-card {
+    background: var(--white);
+    padding: 32px 36px;
+  }
+
+  /* Section title */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--surface);
+  }
+  .section-title .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--teal), var(--navy-mid));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Info grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .info-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .info-field input, .info-field select {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    direction: rtl;
+  }
+  .info-field input:focus, .info-field select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(14,116,144,0.12);
+  }
+
+  /* Employee evaluations */
+  .employees-container { display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px; }
+
+  .employee-card {
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .employee-card:hover { box-shadow: 0 4px 20px rgba(14,116,144,0.12); }
+
+  .employee-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--surface), #e0f2fe);
+    border-bottom: 1px solid var(--border);
+  }
+  .employee-name-wrap {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .emp-avatar {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--teal), var(--navy-mid));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .emp-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--navy);
+  }
+  .emp-role {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .overall-score-wrap {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .overall-score-wrap label {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+  .score-display {
+    min-width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--navy);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    transition: background 0.3s;
+  }
+
+  .employee-body { padding: 20px; }
+
+  .criteria-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .criterion {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid rgba(14,116,144,0.1);
+  }
+  .criterion-number {
+    width: 28px; height: 28px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .criterion-content { flex: 1; }
+  .criterion-text {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  /* Score selector */
+  .score-selector {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .score-btn {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .score-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    transform: translateY(-1px);
+  }
+  .score-btn.selected-low { background: #fee2e2; border-color: var(--danger); color: var(--danger); }
+  .score-btn.selected-mid { background: #fef9c3; border-color: #ca8a04; color: #92400e; }
+  .score-btn.selected-high { background: #d1fae5; border-color: var(--success); color: #065f46; }
+
+  .score-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 0 2px;
+  }
+  .score-labels span { font-size: 10px; color: var(--text-light); }
+
+  /* Notes field */
+  .notes-area {
+    margin-bottom: 32px;
+  }
+  .notes-area textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    transition: border-color 0.2s;
+    direction: rtl;
+  }
+  .notes-area textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14,116,144,0.1); }
+
+  /* Summary */
+  .summary-bar {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .summary-label { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600; }
+  .summary-total {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .summary-score {
+    font-family: 'Tajawal', sans-serif;
+    color: var(--gold);
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .summary-max { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
+  .rating-badge {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    background: rgba(34,211,238,0.15);
+    color: var(--teal-light);
+    border: 1px solid rgba(34,211,238,0.3);
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), #0e6381);
+    color: white;
+    box-shadow: 0 4px 14px rgba(14,116,144,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,116,144,0.45); }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* Footer */
+  .footer-card {
+    background: rgba(13,33,55,0.6);
+    border: 1px solid rgba(14,116,144,0.2);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 14px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-card span { color: rgba(255,255,255,0.4); font-size: 12px; }
+
+  /* Print */
+  .employee-card.manager-card { border-color: rgba(129,140,248,0.5); }
+  .manager-card .employee-header { background: linear-gradient(135deg, #1e1b4b, #2d2a6e); border-bottom-color: rgba(129,140,248,0.3); }
+  .manager-card .emp-name { color: white; }
+  .manager-card .emp-role { color: rgba(255,255,255,0.6); }
+  .manager-card .overall-score-wrap label { color: rgba(255,255,255,0.6); }
+  .manager-card .emp-avatar { background: linear-gradient(135deg, #6366f1, #4338ca); }
+  .criterion.manager-criterion { background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.2); }
+  .manager-criterion .criterion-number { background: #6366f1; }
+  .criteria-section-label { font-size:12px; font-weight:700; color:var(--text-light); letter-spacing:.5px; margin-bottom:10px; padding:5px 10px; background:var(--surface); border-radius:6px; display:inline-block; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .btn, .actions { display: none; }
+    .score-btn { print-color-adjust: exact; }
+  }
+
+  @media (max-width: 600px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .main-card { padding: 20px 16px; }
+    .header { padding: 24px 20px; }
+    .summary-bar { flex-direction: column; text-align: center; }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--navy);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(34,211,238,0.3);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badge">📋 نموذج تقييم شهري</div>
+    <h1>تقييم الأداء الشهري</h1>
+    <h2>قسم التشغيل — المخزن</h2>
+    <div class="header-line"></div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-card">
+
+    <!-- معلومات المُقيِّم -->
+    <div class="section-title">
+      <div class="icon">👤</div>
+      بيانات المُقيِّم
+    </div>
+    <div class="info-grid">
+      <div class="info-field">
+        <label>اسم المُقيِّم</label>
+        <select id="evaluator-name" onchange="onEvaluatorChange()">
+          <option value="">-- اختر اسمك --</option>
+          <option value="ابراهيم بكري">ابراهيم بكري</option>
+          <option value="ياسر العزايزي">ياسر العزايزي</option>
+          <option value="امل حامد">امل حامد</option>
+          <option value="احمد الجداوي">احمد الجداوي</option>
+          <option value="محمد عمر شاكر">محمد عمر شاكر</option>
+          <option value="علي السويسي">علي السويسي</option>
+          <option value="تامر عبد الغفار">تامر عبد الغفار</option>
+          <option value="محمد ريان">محمد ريان</option>
+          <option value="حسين جابر">حسين جابر</option>
+          <option value="محمد العزايزي">محمد العزايزي</option>
+          <option value="مصطفي عرفات">مصطفي عرفات</option>
+          <option value="محمود عبيد">محمود عبيد</option>
+        </select>
+      </div>
+      <div class="info-field">
+        <label>الشهر / السنة</label>
+        <input type="month" id="eval-month" />
+      </div>
+      <div class="info-field">
+        <label>الوظيفة / المسمى</label>
+        <input type="text" id="evaluator-role" readonly style="background:#f1f5f9;color:#64748b;" />
+      </div>
+      <div class="info-field">
+        <label>تاريخ التعبئة</label>
+        <input type="date" id="eval-date" />
+      </div>
+    </div>
+
+    <!-- تقييم الزملاء -->
+    <div class="section-title">
+      <div class="icon">⭐</div>
+      تقييم الزملاء
+    </div>
+
+    <div class="employees-container" id="employees-container">
+      <!-- يتم توليدها بواسطة JS -->
+    </div>
+
+    <!-- ملاحظات عامة -->
+    <div class="section-title">
+      <div class="icon">📝</div>
+      ملاحظات عامة
+    </div>
+    <div class="notes-area">
+      <textarea id="general-notes" placeholder="أضف أي ملاحظات أو تعليقات عامة ترغب في الإشارة إليها..."></textarea>
+    </div>
+
+    <!-- ملخص التقييم -->
+    <div class="summary-bar" id="summary-bar">
+      <div>
+        <div class="summary-label">إجمالي نقاط التقييم</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;">
+          <div class="summary-score" id="total-score">0</div>
+          <div class="summary-max" id="total-max">/ 0</div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <div class="summary-label" style="margin-bottom:6px;">التقدير العام</div>
+        <div class="rating-badge" id="rating-badge">لم يكتمل التقييم</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="summary-label" style="margin-bottom:6px;">نسبة الاكتمال</div>
+        <div style="color:var(--teal-light);font-size:24px;font-weight:800;font-family:'Tajawal',sans-serif;" id="completion-pct">0%</div>
+      </div>
+    </div>
+
+    <!-- الأزرار -->
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="resetForm()">🔄 إعادة تعيين</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+      <button class="btn btn-primary" onclick="submitForm()">✅ إرسال التقييم</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-card">
+    <span>نموذج تقييم الأداء الشهري — قسم التشغيل</span>
+    <span>سري وخاص بالإدارة</span>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // بيانات الموظفين
+  const allEmployees = [
+    { id: 1,  name: 'ابراهيم بكري',       role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 2,  name: 'ياسر العزايزي',      role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 3,  name: 'امل حامد',           role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 4,  name: 'احمد الجداوي',       role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 5,  name: 'محمد عمر شاكر',      role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 6,  name: 'علي السويسي',        role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 7,  name: 'تامر عبد الغفار',    role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 8,  name: 'محمد ريان',          role: 'مسؤول إمداد ومخزون',         isManager: false },
+    { id: 9,  name: 'حسين جابر',          role: 'مساعد مسؤول إمداد ومخزون',   isManager: false },
+    { id: 10, name: 'محمد العزايزي',      role: 'مساعد مسؤول إمداد ومخزون',   isManager: false },
+    { id: 11, name: 'مصطفي عرفات',        role: 'مساعد مسؤول إمداد ومخزون',   isManager: false },
+    { id: 12, name: 'محمود عبيد',         role: 'مدير قسم التشغيل',            isManager: true  },
+  ];
+
+  const managerExtraCriteria = [
+    { id: 'mc1', title: 'مشاركة مشاكل الموظف والاستماع الجيد له',
+      text: 'مدى اهتمام المدير بالاستماع لمشاكل كل موظف بشكل فردي، وتفهّم ظروفه، وإيجاد بيئة تشجع على الانفتاح والتواصل الصريح.' },
+    { id: 'mc2', title: 'تنفيذ الطلبات الخاصة بتطوير الموظف',
+      text: 'مدى متابعة المدير وتنفيذه للطلبات والمبادرات المرتبطة بتطوير مهارات الموظف ورفع كفاءته المهنية.' },
+    { id: 'mc3', title: 'المساهمة في حل مشاكل طريقة العمل اليومية',
+      text: 'مدى مساهمة المدير الفعّالة في تشخيص وحل المشاكل التشغيلية اليومية التي تواجه فريق العمل، وتوفير الدعم اللازم لاستمرارية الأداء.' },
+  ];
+
+  function getEvaluatorRole(name) {
+    const emp = allEmployees.find(e => e.name === name);
+    return emp ? emp.role : '';
+  }
+
+  function getCriteriaForEmp(emp) {
+    if (emp.isManager) return [...criteria, ...managerExtraCriteria];
+    return criteria;
+  }
+
+  // يُظهر الزملاء فقط (يُخفي المُقيِّم نفسه)
+  function getEmployees() {
+    const evaluator = document.getElementById('evaluator-name').value;
+    return allEmployees.filter(e => e.name !== evaluator);
+  }
+
+  const criteria = [
+    { id: 'c1', title: 'الالتزام بإجراءات وأسلوب العمل المعتمد', text: 'مدى التزام الموظف بتطبيق طريقة العمل والإجراءات التشغيلية المتفق عليها مع إدارة قسم التشغيل، وعدم الخروج عنها دون الرجوع للمسؤول المختص.' },
+    { id: 'c2', title: 'التعاون وحسن التعامل مع زملاء القسم', text: 'مدى التزام الموظف بروح الفريق والتعاون الإيجابي مع زملائه داخل قسم التشغيل، وحسن خُلقه وأسلوب تواصله معهم في بيئة العمل اليومية.' },
+    { id: 'c3', title: 'التعاون وحسن التعامل مع الأقسام الأخرى', text: 'مدى التزام الموظف بالتعاون البنّاء وحسن الخُلق في تعاملاته مع موظفي الأقسام الأخرى خارج قسم التشغيل، وانعكاس ذلك على سير العمل المشترك.' },
+    { id: 'c4', title: 'الالتزام بخطوات تنزيل الفواتير', text: 'مدى التزام الموظف بتطبيق خطوات تنزيل وإدخال الفواتير بشكل صحيح ومتسلسل وفق الإجراء المعتمد، وعدم تخطي أي خطوة أو إجراء اختصارات غير مصرح بها.' },
+  ];
+
+  // scores[empId][criterionId] = score
+  const scores = {};
+
+  function getScoreClass(score) {
+    if (!score) return '';
+    if (score <= 4) return 'selected-low';
+    if (score <= 7) return 'selected-mid';
+    return 'selected-high';
+  }
+
+  function getScoreColor(avg) {
+    if (!avg || avg === 0) return '#334155';
+    if (avg <= 4) return '#ef4444';
+    if (avg <= 7) return '#ca8a04';
+    return '#10b981';
+  }
+
+  function setScore(empId, critId, score) {
+    if (!scores[empId]) scores[empId] = {};
+    scores[empId][critId] = score;
+
+    // Update buttons
+    const btns = document.querySelectorAll(`.score-btn[data-emp="${empId}"][data-crit="${critId}"]`);
+    btns.forEach(btn => {
+      btn.className = 'score-btn';
+      if (parseInt(btn.dataset.score) === score) {
+        btn.classList.add(getScoreClass(score));
+      }
+    });
+
+    // Update employee average display
+    updateEmployeeAvg(empId);
+    updateSummary();
+  }
+
+  function updateEmployeeAvg(empId) {
+    const emp = allEmployees.find(e => e.id === empId);
+    const crit = (emp && typeof getCriteriaForEmp === 'function') ? getCriteriaForEmp(emp) : criteria;
+    const empScores = scores[empId] || {};
+    const vals = crit.map(c => empScores[c.id]).filter(v => v !== undefined);
+    const avg = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+    const display = document.getElementById(`avg-${empId}`);
+    if (display) {
+      display.textContent = avg > 0 ? avg.toFixed(1) : '—';
+      display.style.background = getScoreColor(avg);
+    }
+  }
+
+  function updateSummary() {
+    const employees = getEmployees();
+    let total = 0, possible = 0, filled = 0, allFields = 0;
+    employees.forEach(emp => {
+      const empCrit = typeof getCriteriaForEmp === 'function' ? getCriteriaForEmp(emp) : criteria;
+      empCrit.forEach(c => {
+        allFields++;
+        const s = (scores[emp.id] || {})[c.id];
+        if (s !== undefined) { total += s; filled++; }
+        possible += 10;
+      });
+    });
+
+    document.getElementById('total-score').textContent = total;
+    document.getElementById('total-max').textContent = `/ ${possible}`;
+    const pct = allFields > 0 ? Math.round((filled / allFields) * 100) : 0;
+    document.getElementById('completion-pct').textContent = pct + '%';
+
+    const avgAll = filled > 0 ? total / filled : 0;
+    let badge = 'لم يكتمل التقييم';
+    let badgeColor = 'rgba(34,211,238,0.15)';
+    let badgeText = 'var(--teal-light)';
+    if (filled > 0 && filled === allFields) {
+      if (avgAll >= 9) { badge = '🏆 ممتاز'; badgeColor='rgba(16,185,129,0.2)'; badgeText='#10b981'; }
+      else if (avgAll >= 7) { badge = '✅ جيد جداً'; badgeColor='rgba(16,185,129,0.15)'; badgeText='#34d399'; }
+      else if (avgAll >= 5) { badge = '📊 جيد'; badgeColor='rgba(245,158,11,0.15)'; badgeText='#f59e0b'; }
+      else { badge = '⚠️ يحتاج تحسين'; badgeColor='rgba(239,68,68,0.15)'; badgeText='#ef4444'; }
+    }
+    const el = document.getElementById('rating-badge');
+    el.textContent = badge;
+    el.style.background = badgeColor;
+    el.style.color = badgeText;
+    el.style.borderColor = badgeText;
+  }
+
+  function onEvaluatorChange() {
+    const name = document.getElementById('evaluator-name').value;
+    document.getElementById('evaluator-role').value = getEvaluatorRole(name);
+    Object.keys(scores).forEach(k => delete scores[k]);
+    buildForm();
+  }
+
+  function buildForm() {
+    const employees = getEmployees();
+    const container = document.getElementById('employees-container');
+    container.innerHTML = '';
+
+    if (!document.getElementById('evaluator-name').value) {
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:14px;">👆 اختر اسمك أولاً لتظهر قائمة الزملاء</div>';
+      updateSummary();
+      return;
+    }
+
+    employees.forEach((emp, idx) => {
+      const card = document.createElement('div');
+      card.className = 'employee-card' + (emp.isManager ? ' manager-card' : '');
+
+      function renderCritBlock(critList, isExtra) {
+        return critList.map((c, ci) => `
+          <div class="criterion ${isExtra ? 'manager-criterion' : ''}">
+            <div class="criterion-number">${ci + 1}</div>
+            <div class="criterion-content">
+              <div class="criterion-text"><strong>${c.title}</strong><br>
+                <span style="font-weight:400;font-size:12.5px;color:var(--text-light);line-height:1.7;">${c.text}</span>
+              </div>
+              <div class="score-selector">
+                ${[1,2,3,4,5,6,7,8,9,10].map(n =>
+                  `<button class="score-btn ${(scores[emp.id]||{})[c.id]===n ? getScoreClass(n) : ''}"
+                    data-emp="${emp.id}" data-crit="${c.id}" data-score="${n}"
+                    onclick="setScore(${emp.id},'${c.id}',${n})" title="درجة ${n}">${n}</button>`
+                ).join('')}
+              </div>
+              <div class="score-labels">
+                <span>🔴 ضعيف (1-4)</span><span>🟡 متوسط (5-7)</span><span>🟢 ممتاز (8-10)</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      let bodyHTML = '';
+      if (emp.isManager) {
+        bodyHTML = `
+          <div class="criteria-section-label">البنود الأساسية</div>
+          <div class="criteria-list">${renderCritBlock(criteria, false)}</div>
+          <div class="criteria-section-label" style="margin-top:18px;color:#6366f1;background:rgba(99,102,241,0.08);">🏅 بنود خاصة بتقييم المدير</div>
+          <div class="criteria-list" style="margin-top:10px;">${renderCritBlock(managerExtraCriteria, true)}</div>
+        `;
+      } else {
+        bodyHTML = `<div class="criteria-list">${renderCritBlock(criteria, false)}</div>`;
+      }
+
+      card.innerHTML = `
+        <div class="employee-header">
+          <div class="employee-name-wrap">
+            <div class="emp-avatar">${emp.isManager ? '👑' : (idx + 1)}</div>
+            <div>
+              <div class="emp-name">${emp.name}</div>
+              <div class="emp-role">${emp.role}</div>
+              ${emp.isManager ? '<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(129,140,248,0.2);border:1px solid rgba(129,140,248,0.4);border-radius:100px;padding:3px 10px;font-size:11px;color:#818cf8;margin-top:3px;">⭐ مدير القسم</div>' : ''}
+            </div>
+          </div>
+          <div class="overall-score-wrap">
+            <label>متوسط التقييم</label>
+            <div class="score-display" id="avg-${emp.id}">—</div>
+          </div>
+        </div>
+        <div class="employee-body" ${emp.isManager ? 'style="background:#f8f7ff;"' : ''}>${bodyHTML}</div>
+      `;
+      container.appendChild(card);
+      updateEmployeeAvg(emp.id);
+    });
+    updateSummary();
+  }
+
+  function validateForm() {
+    if (!document.getElementById('evaluator-name').value) {
+      showToast('⚠️ الرجاء اختيار اسم المُقيِّم');
+      return false;
+    }
+    for (const emp of getEmployees()) {
+      const empCrit = typeof getCriteriaForEmp === 'function' ? getCriteriaForEmp(emp) : criteria;
+      for (const c of empCrit) {
+        if ((scores[emp.id] || {})[c.id] === undefined) {
+          showToast(`⚠️ لم تكتمل درجات تقييم ${emp.name}`);
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  function submitForm() {
+    if (!validateForm()) return;
+    showToast('✅ تم إرسال التقييم بنجاح — شكراً لك!');
+  }
+
+  function resetForm() {
+    if (!confirm('هل تريد مسح جميع البيانات وإعادة التعيين؟')) return;
+    document.getElementById('evaluator-name').value = '';
+    document.getElementById('evaluator-role').value = '';
+    document.getElementById('eval-date').value = '';
+    document.getElementById('eval-month').value = '';
+    document.getElementById('general-notes').value = '';
+    Object.keys(scores).forEach(k => delete scores[k]);
+    buildForm();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Init
+  const today = new Date();
+  document.getElementById('eval-date').value = today.toISOString().split('T')[0];
+  document.getElementById('eval-month').value = today.toISOString().slice(0, 7);
+  buildForm();
+  updateSummary();
+</script>
+</body>
+</html>
